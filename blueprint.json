@@ -15,12 +15,23 @@
         "level": "alpha",
         "patch": 0
       }
-    }
+    },
+    "timestamp": "2019-02-21T14:14:34+11:00"
   },
   "software": {
     "base": {
+      "name": "devpi",
+      "framework": "python",
       "deployment_type": "web",
       "http_protocol": "https_and_http"
+    },
+    "scripts": {
+      "start": {
+        "content": "#!/bin/sh\r\nsleep\r\n devpi-server --start --init"
+      },
+      "install": {
+        "content": "#!/bin/sh\r\n\r\npip3 install -q -U devpi-server"
+      }
     }
   }
 }
