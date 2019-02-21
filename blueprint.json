@@ -16,24 +16,42 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-02-21T14:23:49+11:00"
+    "timestamp": "2019-02-21T15:03:45+11:00"
   },
   "software": {
     "base": {
       "name": "devpi",
       "framework": "python",
       "deployment_type": "web",
-      "http_protocol": "https_and_http"
+      "http_protocol": "https_and_http",
+      "memory": {
+        "required": 256,
+        "recommended": 381
+      }
     },
     "scripts": {
       "start": {
         "language": "sh",
-        "content": "#!/bin/sh\r\nsleep  8585\r\n devpi-server --start --init"
+        "content": "#!/bin/sh\r\nPID_FILE=/home/fs/repos/.xproc/devpi-server/xprocess.PID \r\nexport PID_FILE\r\n. /home/engines/functions/trap.sh\r\nsleep  8585\r\n devpi-server --start --init --serverdir /home/fs/repos\r\n devpi-server   --start \\\r\n                --port 8000\\\r\n                --host 0.0.0.0\\\r\n                --serverdir /home/fs/repos\\\r\n                --outside-url=_EnginesEnvironment(fqdn)\r\n\r\n\r\nstartup_complete                \r\nsleep \r\n\r\nwait\r\n devpi-server --stop  --serverdir /home/fs/repos\\\r\nshutdown_complete"
       },
       "install": {
         "language": "sh",
-        "content": "#!/bin/sh\r\n\r\npip3 install -q -U devpi-server"
+        "content": "#!/bin/sh\r\npip3 install wheel\r\npip3 install devpi-server"
       }
-    }
+    },
+    "service_configurations": [
+      {
+        "publisher_namespace": "EnginesSystem",
+        "type_path": "filesystem/local/filesystem",
+        "variables": {
+          "service_name": "_Engines_Builder(engine_name)",
+          "volume_src": "repo",
+          "engine_path": "/home/fs/repo",
+          "permissions": "rw",
+          "user": "_Engines_Builder(data_uid)",
+          "group": "_Engines_Builder(data_gid)"
+        }
+      }
+    ]
   }
 }
