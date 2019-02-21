@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-02-21T15:03:45+11:00"
+    "timestamp": "2019-02-21T18:52:12+11:00"
   },
   "software": {
     "base": {
@@ -32,7 +32,7 @@
     "scripts": {
       "start": {
         "language": "sh",
-        "content": "#!/bin/sh\r\nPID_FILE=/home/fs/repos/.xproc/devpi-server/xprocess.PID \r\nexport PID_FILE\r\n. /home/engines/functions/trap.sh\r\nsleep  8585\r\n devpi-server --start --init --serverdir /home/fs/repos\r\n devpi-server   --start \\\r\n                --port 8000\\\r\n                --host 0.0.0.0\\\r\n                --serverdir /home/fs/repos\\\r\n                --outside-url=_EnginesEnvironment(fqdn)\r\n\r\n\r\nstartup_complete                \r\nsleep \r\n\r\nwait\r\n devpi-server --stop  --serverdir /home/fs/repos\\\r\nshutdown_complete"
+        "content": "#!/bin/sh\r\nPID_FILE=/home/fs/repos/.xproc/devpi-server/xprocess.PID \r\nexport PID_FILE\r\nexport PATH=$PATH:/home/home_dir/.local/bin/\r\n. /home/engines/functions/trap.sh\r\nsleep  8585\r\n devpi-server --start --init --serverdir /home/fs/repos\r\n devpi-server   --start \\\r\n                --port 8000\\\r\n                --host 0.0.0.0\\\r\n                --serverdir /home/fs/repos\\\r\n                --outside-url=_EnginesEnvironment(fqdn)\r\n\r\n\r\nstartup_complete                \r\nsleep \r\n\r\nwait\r\n devpi-server --stop  --serverdir /home/fs/repos\\\r\nshutdown_complete"
       },
       "install": {
         "language": "sh",
@@ -44,9 +44,9 @@
         "publisher_namespace": "EnginesSystem",
         "type_path": "filesystem/local/filesystem",
         "variables": {
-          "service_name": "_Engines_Builder(engine_name)",
-          "volume_src": "repo",
-          "engine_path": "/home/fs/repo",
+          "service_name": "repo",
+          "volume_src": "",
+          "engine_path": "",
           "permissions": "rw",
           "user": "_Engines_Builder(data_uid)",
           "group": "_Engines_Builder(data_gid)"
