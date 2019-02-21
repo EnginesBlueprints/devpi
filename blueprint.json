@@ -16,14 +16,14 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-02-21T18:52:12+11:00"
+    "timestamp": "2019-02-22T09:50:28+11:00"
   },
   "software": {
     "base": {
       "name": "devpi",
       "framework": "python",
       "deployment_type": "web",
-      "http_protocol": "https_and_http",
+      "http_protocol": "https_only",
       "memory": {
         "required": 256,
         "recommended": 381
@@ -32,7 +32,7 @@
     "scripts": {
       "start": {
         "language": "sh",
-        "content": "#!/bin/sh\r\nPID_FILE=/home/fs/repos/.xproc/devpi-server/xprocess.PID \r\nexport PID_FILE\r\nexport PATH=$PATH:/home/home_dir/.local/bin/\r\n. /home/engines/functions/trap.sh\r\nsleep  8585\r\n devpi-server --start --init --serverdir /home/fs/repos\r\n devpi-server   --start \\\r\n                --port 8000\\\r\n                --host 0.0.0.0\\\r\n                --serverdir /home/fs/repos\\\r\n                --outside-url=_EnginesEnvironment(fqdn)\r\n\r\n\r\nstartup_complete                \r\nsleep \r\n\r\nwait\r\n devpi-server --stop  --serverdir /home/fs/repos\\\r\nshutdown_complete"
+        "content": "#!/bin/sh\r\nPID_FILE=/home/fs/repos/.xproc/devpi-server/xprocess.PID \r\nexport PID_FILE\r\nexport PATH=$PATH:/home/home_dir/.local/bin/\r\n. /home/engines/functions/trap.sh\r\nsleep  8585\r\n devpi-server --start --init --serverdir /home/fs/repo\r\n devpi-server   --start \\\r\n                --port 8000\\\r\n                --host 0.0.0.0\\\r\n                --serverdir /home/fs/repo\\\r\n                --outside-url=_EnginesEnvironment(fqdn)\r\n\r\n\r\nstartup_complete                \r\nsleep \r\n\r\nwait\r\n devpi-server --stop  --serverdir /home/fs/repos\\\r\nshutdown_complete"
       },
       "install": {
         "language": "sh",
