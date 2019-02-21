@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-02-21T14:14:34+11:00"
+    "timestamp": "2019-02-21T14:22:13+11:00"
   },
   "software": {
     "base": {
@@ -27,9 +27,11 @@
     },
     "scripts": {
       "start": {
+        "language": "sh",
         "content": "#!/bin/sh\r\nsleep\r\n devpi-server --start --init"
       },
       "install": {
+        "language": "sh",
         "content": "#!/bin/sh\r\n\r\npip3 install -q -U devpi-server"
       }
     }
