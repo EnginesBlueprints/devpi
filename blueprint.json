@@ -16,12 +16,12 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-02-22T10:22:43+11:00"
+    "timestamp": "2019-03-08T13:23:04+11:00"
   },
   "software": {
     "base": {
       "name": "devpi",
-      "framework": "python",
+      "framework": "python3.7",
       "deployment_type": "web",
       "http_protocol": "https_only",
       "memory": {
@@ -32,13 +32,26 @@
     "scripts": {
       "start": {
         "language": "sh",
-        "content": "#!/bin/sh\r\nPID_FILE=/home/fs/repos/.xproc/devpi-server/xprocess.PID \r\nexport PID_FILE\r\nexport PATH=$PATH:/home/home_dir/.local/bin/\r\n. /home/engines/functions/trap.sh\r\n\r\nmkdir /home/fs/repo/devpi-server\r\n devpi-server --start --init --serverdir /home/fs/repo/devpi-server\r\n devpi-server   --start \\\r\n                --port 8000\\\r\n                --host 0.0.0.0\\\r\n                --serverdir /home/fs/repo\\\r\n                --outside-url=_Engines_Environment(fqdn)\r\n\r\n\r\nstartup_complete                \r\nsleep \r\n\r\nwait\r\n devpi-server --stop  --serverdir /home/fs/repos\\\r\nshutdown_complete"
+        "content": "#!/bin/sh\r\nPID_FILE=/home/fs/repos/.xproc/devpi-server/xprocess.PID \r\nexport PID_FILE\r\nexport PATH=$PATH:/home/home_dir/.local/bin/\r\n. /home/engines/functions/trap.sh\r\n\r\n\r\n devpi-server   --start \\\r\n                --port 8000\\\r\n                --host 0.0.0.0\\\r\n                --serverdir /home/fs/repo\\\r\n                --outside-url=_Engines_Environment(fqdn)\r\n\r\n\r\nstartup_complete                \r\nsleep \r\n\r\nwait\r\n devpi-server --stop  --serverdir /home/fs/repos\\\r\nshutdown_complete"
       },
       "install": {
         "language": "sh",
         "content": "#!/bin/sh\r\npip3 install wheel\r\npip3 install devpi-server"
+      },
+      "first_run": {
+        "content": "#!/bin/sh\r\ncd /home/app\r\nmkdir /home/fs/repo/devpi-server\r\n\r\ndevpi-server --start --init --serverdir /home/fs/repo/devpi-server"
       }
     },
+    "required_modules": [
+      {
+        "name": "wheel",
+        "type": "python"
+      },
+      {
+        "name": "devpi-server",
+        "type": "python"
+      }
+    ],
     "service_configurations": [
       {
         "publisher_namespace": "EnginesSystem",
