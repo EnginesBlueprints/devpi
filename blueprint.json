@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-09T10:41:55+11:00"
+    "timestamp": "2019-03-09T11:06:05+11:00"
   },
   "software": {
     "base": {
@@ -49,6 +49,14 @@
       },
       {
         "name": "devpi-server",
+        "type": "python"
+      },
+      {
+        "name": "devpi-client",
+        "type": "python"
+      },
+      {
+        "name": "devpi-web",
         "type": "python"
       }
     ],
