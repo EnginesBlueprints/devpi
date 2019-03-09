@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-09T12:29:57+11:00"
+    "timestamp": "2019-03-09T13:24:29+11:00"
   },
   "software": {
     "base": {
@@ -97,7 +97,7 @@
         "label": "List user",
         "return_type": "plain_text",
         "script": {
-          "content": "#!/bin/sh\r\n\r\n. /home/app/venv/bin/activate\r\n\r\n  /home/home_dir/.local/bin/devpi use http://localhost:8000\r\n /home/home_dir/.local/bin/devpi users -l"
+          "content": "#!/bin/sh\r\n\r\n. /home/app/venv/bin/activate\r\n\r\n  /home/home_dir/.local/bin/devpi use http://$fqdn/\r\n /home/home_dir/.local/bin/devpi user -l"
         }
       },
       {
@@ -126,7 +126,7 @@
           }
         ],
         "script": {
-          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\n\r\nspawn devpi-server --passwd $username  --serverdir /home/fs/repo/devpi-server/\r\n\r\n\r\nexpect \"enter password for $env(username):\" { send \"$env(password)\\r\" }\r\nexpect \"repeat password for $env(username):\" { send \"$env(password)\\r\" }\r\nexpect eof\r\n\r\n#interact\r\n"
+          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\n\r\nspawn devpi-server --passwd $env(username)  --serverdir /home/fs/repo/devpi-server/\r\n\r\n\r\nexpect \"enter password for $env(username):\" { send \"$env(password)\\r\" }\r\nexpect \"repeat password for $env(username):\" { send \"$env(password)\\r\" }\r\nexpect eof\r\n\r\n#interact\r\n"
         }
       }
     ]
