@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-09T13:24:29+11:00"
+    "timestamp": "2019-03-09T13:33:54+11:00"
   },
   "software": {
     "base": {
@@ -24,6 +24,7 @@
       "framework": "python3.7",
       "deployment_type": "web",
       "http_protocol": "https_only",
+      "framework_port_override": 8000,
       "memory": {
         "required": 256,
         "recommended": 381
