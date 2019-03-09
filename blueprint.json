@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-09T11:06:05+11:00"
+    "timestamp": "2019-03-09T12:29:57+11:00"
   },
   "software": {
     "base": {
@@ -32,14 +32,14 @@
     "scripts": {
       "start": {
         "language": "sh",
-        "content": "#!/bin/sh\r\n#PID_FILE=/home/fs/repo/.xproc/devpi-server/xprocess.PID \r\nPID_FILE=/tmp/sleep.pid\r\nexport PID_FILE\r\nexport PATH=$PATH:/home/home_dir/.local/bin/\r\n. /home/engines/functions/trap.sh\r\n\r\n\r\n devpi-server   --start \\\r\n                --port 8000\\\r\n                --host 0.0.0.0\\\r\n                --serverdir  /home/fs/repo/devpi-server\r\n                --outside-url=$fqdn\r\n\r\n\r\nstartup_complete\r\ns=0\r\nwhile test $s -eq 0\r\n do\r\n  sleep 3600 &\r\n   echo $! > /tmp/sleep.pid\r\n   wait\r\ndone\r\n\r\ndevpi-server --stop  --serverdir /home/fs/repo/devpi-server\r\nshutdown_complete"
+        "content": "#!/bin/sh\r\n#PID_FILE=/home/fs/repo/.xproc/devpi-server/xprocess.PID \r\nPID_FILE=/tmp/sleep.pid\r\nexport PID_FILE\r\nexport PATH=$PATH:/home/home_dir/.local/bin/\r\n. /home/engines/functions/trap.sh\r\n\r\n\r\n devpi-server   --start \\\r\n                --port 8000\\\r\n                --host 0.0.0.0\\\r\n                --serverdir  /home/fs/repo/devpi-server\\\r\n                --restrict-modify root\\\r\n                --outside-url=$fqdn\r\n\r\n\r\nstartup_complete\r\ns=0\r\nwhile test $s -eq 0\r\n do\r\n  sleep 3600 &\r\n   echo $! > /tmp/sleep.pid\r\n   wait\r\ndone\r\n\r\ndevpi-server --stop  --serverdir /home/fs/repo/devpi-server\r\nshutdown_complete"
       },
       "install": {
         "language": "sh",
         "content": "#!/bin/sh\r\npip3 install wheel\r\npip3 install devpi-server"
       },
       "first_run": {
-        "content": "#!/bin/sh\r\ncd /home/app\r\nmkdir /home/fs/repo/devpi-server\r\n\r\ndevpi-server --start --init --serverdir /home/fs/repo/devpi-server"
+        "content": "#!/bin/sh\r\ncd /home/app\r\nif ! test -d /home/fs/repo/devpi-server\r\n then\r\n  mkdir /home/fs/repo/devpi-server\r\n  devpi-server --start --init --serverdir /home/fs/repo/devpi-server\r\nfi  "
       }
     },
     "required_modules": [
@@ -71,6 +71,62 @@
           "permissions": "rw",
           "user": "_Engines_Builder(data_uid)",
           "group": "_Engines_Builder(data_gid)"
+        }
+      }
+    ],
+    "actionators": [
+      {
+        "name": "show_status",
+        "label": "Show status",
+        "return_type": "plain_text",
+        "script": {
+          "language": "sh",
+          "content": "#!/bin/sh\r\n\r\n. /home/app/venv/bin/activate\r\n\r\ndevpi-server --status  --serverdir /home/fs/repo/devpi-server/"
+        }
+      },
+      {
+        "name": "show_log",
+        "label": "Show log",
+        "return_type": "plain_text",
+        "script": {
+          "content": "#!/bin/sh\r\n\r\n. /home/app/venv/bin/activate\r\n\r\ndevpi-server --log  --serverdir /home/fs/repo/devpi-server/"
+        }
+      },
+      {
+        "name": "list_users",
+        "label": "List user",
+        "return_type": "plain_text",
+        "script": {
+          "content": "#!/bin/sh\r\n\r\n. /home/app/venv/bin/activate\r\n\r\n  /home/home_dir/.local/bin/devpi use http://localhost:8000\r\n /home/home_dir/.local/bin/devpi users -l"
+        }
+      },
+      {
+        "name": "set_user_password",
+        "label": "Set User Password",
+        "return_type": "plain_text",
+        "variables": [
+          {
+            "name": "user_name",
+            "mandatory": true,
+            "input": {
+              "type": "select_with_input",
+              "collection": {
+                "items": {
+                  "root": "root"
+                }
+              }
+            }
+          },
+          {
+            "name": "password",
+            "mandatory": true,
+            "input": {
+              "type": "password_with_confirmation"
+            }
+          }
+        ],
+        "script": {
+          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\n\r\nspawn devpi-server --passwd $username  --serverdir /home/fs/repo/devpi-server/\r\n\r\n\r\nexpect \"enter password for $env(username):\" { send \"$env(password)\\r\" }\r\nexpect \"repeat password for $env(username):\" { send \"$env(password)\\r\" }\r\nexpect eof\r\n\r\n#interact\r\n"
         }
       }
     ]
