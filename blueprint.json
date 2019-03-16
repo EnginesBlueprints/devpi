@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-12T15:56:09+11:00"
+    "timestamp": "2019-03-16T18:45:43+11:00"
   },
   "software": {
     "base": {
@@ -139,7 +139,70 @@
           }
         ],
         "script": {
-          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\n\r\nspawn devpi-server --passwd $env(username)  --serverdir /home/fs/repo/devpi-server/\r\n\r\n\r\nexpect \"enter password for $env(username):\" { send \"$env(password)\\r\" }\r\nexpect \"repeat password for $env(username):\" { send \"$env(password)\\r\" }\r\nexpect eof\r\n\r\n#interact\r\n"
+          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\n\r\nspawn devpi-server --passwd $env(user_name)  --serverdir /home/fs/repo/devpi-server/\r\n\r\n\r\nexpect \"enter password for $env(user_name):\" { send \"$env(password)\\r\" }\r\nexpect \"repeat password for $env(user_name):\" { send \"$env(password)\\r\" }\r\nexpect eof\r\n\r\n#interact\r\n"
+        }
+      },
+      {
+        "name": "create_user",
+        "return_type": "plain_text",
+        "variables": [
+          {
+            "name": "root_password",
+            "input": {
+              "type": "password"
+            }
+          },
+          {
+            "name": "user_name",
+            "mandatory": true,
+            "input": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "user_password",
+            "input": {
+              "type": "password_with_confirmation"
+            }
+          }
+        ],
+        "script": {
+          "language": "sh",
+          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\nspawn devpi use http://localhost:8000\r\nspawn devpi login root\r\n\r\n\r\nexpect \"password for user root:\" { send \"$env(password)\\r\" }\r\n\r\nexpect eof\r\n\r\nspawn devpi user -c $env(user_name) email=$env(email) password=$env(user_password)\r\n#interact\r\n"
+        }
+      },
+      {
+        "name": "create_index",
+        "return_type": "plain_text",
+        "variables": [
+          {
+            "name": "index_path",
+            "input": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bases",
+            "input": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "volatile",
+            "input": {
+              "type": "select",
+              "collection": {
+                "items": {
+                  "False": "False",
+                  "True": "True"
+                }
+              }
+            }
+          }
+        ],
+        "script": {
+          "language": "sh",
+          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\nspawn devpi use http://localhost:8000\r\nspawn devpi login root\r\n\r\n\r\nexpect \"password for user root:\" { send \"$env(root_password)\\r\" }\r\n\r\nexpect eof\r\n\r\nspawn devpi index -c $env(index_path) bases=$env(bases) volatile=$env(volatile)\r\n#interact\r\n"
         }
       }
     ]
