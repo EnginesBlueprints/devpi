@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-16T19:37:42+11:00"
+    "timestamp": "2019-03-16T20:21:15+11:00"
   },
   "software": {
     "base": {
@@ -79,7 +79,6 @@
       {
         "name": "internal_only",
         "value": "false",
-        "mandatory": true,
         "ask_at_build_time": true,
         "input": {
           "type": "checkbox_boolean",
