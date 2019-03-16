@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-16T18:52:12+11:00"
+    "timestamp": "2019-03-16T19:37:42+11:00"
   },
   "software": {
     "base": {
@@ -110,7 +110,7 @@
         "label": "List user",
         "return_type": "plain_text",
         "script": {
-          "content": "#!/bin/sh\r\n\r\n. /home/app/venv/bin/activate\r\n\r\n  /home/home_dir/.local/bin/devpi use http://$fqdn/\r\n /home/home_dir/.local/bin/devpi user -l"
+          "content": "#!/bin/sh\r\n\r\n. /home/app/venv/bin/activate\r\n\r\n  /home/home_dir/.local/bin/devpi use https://$fqdn/\r\n /home/home_dir/.local/bin/devpi user -l"
         }
       },
       {
@@ -168,7 +168,7 @@
         ],
         "script": {
           "language": "sh",
-          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\nspawn devpi use http://localhost:8000\r\nspawn devpi login root\r\n\r\n\r\nexpect \"password for user root:\" { send \"$env(password)\\r\" }\r\n\r\nexpect eof\r\n\r\nspawn devpi user -c $env(user_name) email=$env(email) password=$env(user_password)\r\n#interact\r\n"
+          "content": "#!/bin/sh\r\n\r\n/home/engines/scripts/actionators/login_root.sh\r\ndevpi user -c $env(user_name) email=$env(email) password=$env(user_password)\r\n\r\n"
         }
       },
       {
@@ -202,7 +202,7 @@
         ],
         "script": {
           "language": "sh",
-          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\nspawn devpi use http://localhost:8000\r\nspawn devpi login root\r\n\r\n\r\nexpect \"password for user root:\" { send \"$env(root_password)\\r\" }\r\n\r\nexpect eof\r\n\r\nspawn devpi index -c $env(index_path) bases=$env(bases) volatile=$env(volatile)\r\n#interact\r\n"
+          "content": "#!/bin/sh \r\n\r\n/home/engines/scripts/actionators/login_root.sh\r\ndevpi index -c $env(index_path) bases=$env(bases) volatile=$env(volatile)\r\n"
         }
       },
       {
@@ -217,7 +217,22 @@
           }
         ],
         "script": {
-          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\nspawn devpi use http://localhost:8000\r\nspawn devpi login root\r\n\r\n\r\nexpect \"password for user root:\" { send \"$env(password)\\r\" }\r\nspawn devpi $env(agruments)\r\nexpect eof\r\n"
+          "content": "#!/bin/sh\r\n\r\n/home/engines/scripts/actionators/login_root.sh\r\ndevpi $env(agruments)\r\n\r\n"
+        }
+      },
+      {
+        "name": "_login_root",
+        "return_type": "plain_text",
+        "script": {
+          "language": "sh",
+          "content": "#!/bin/sh\r\n\r\n. /home/app/venv/bin/activate\r\ndevpi use http://localhost:8000\r\ndevpi login root\r\n\r\n"
+        }
+      },
+      {
+        "name": "login_root",
+        "return_type": "none",
+        "script": {
+          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\nspawn /home/engines/scripts/actionator/_login_root.sh\r\n\r\nexpect \"password for user root:\" { send \"$env(root_password)\\r\" }\r\n\r\nexpect eof"
         }
       }
     ]
