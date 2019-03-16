@@ -16,7 +16,7 @@
         "patch": 0
       }
     },
-    "timestamp": "2019-03-16T20:21:15+11:00"
+    "timestamp": "2019-03-16T21:05:58+11:00"
   },
   "software": {
     "base": {
@@ -167,7 +167,7 @@
         ],
         "script": {
           "language": "sh",
-          "content": "#!/bin/sh\r\n\r\n/home/engines/scripts/actionators/login_root.sh\r\ndevpi user -c $env(user_name) email=$env(email) password=$env(user_password)\r\n\r\n"
+          "content": "#!/bin/sh\r\n\r\n/home/engines/scripts/actionators/login_root.sh\r\n/home/home_dir/.local/bin/devpi user -c $env(user_name) email=$env(email) password=$env(user_password)\r\n\r\n"
         }
       },
       {
@@ -201,7 +201,7 @@
         ],
         "script": {
           "language": "sh",
-          "content": "#!/bin/sh \r\n\r\n/home/engines/scripts/actionators/login_root.sh\r\ndevpi index -c $env(index_path) bases=$env(bases) volatile=$env(volatile)\r\n"
+          "content": "#!/bin/sh \r\n\r\n/home/engines/scripts/actionators/login_root.sh\r\n/home/home_dir/.local/bin/devpi index -c $env(index_path) bases=$env(bases) volatile=$env(volatile)\r\n"
         }
       },
       {
@@ -216,7 +216,7 @@
           }
         ],
         "script": {
-          "content": "#!/bin/sh\r\n\r\n/home/engines/scripts/actionators/login_root.sh\r\ndevpi $env(agruments)\r\n\r\n"
+          "content": "#!/bin/sh\r\n\r\n/home/engines/scripts/actionators/login_root.sh\r\n/home/home_dir/.local/bin/devpi $env(agruments)\r\n\r\n"
         }
       },
       {
@@ -224,14 +224,14 @@
         "return_type": "plain_text",
         "script": {
           "language": "sh",
-          "content": "#!/bin/sh\r\n\r\n. /home/app/venv/bin/activate\r\ndevpi use http://localhost:8000\r\ndevpi login root\r\n\r\n"
+          "content": "#!/bin/sh\r\n\r\n. /home/app/venv/bin/activate\r\n/home/home_dir/.local/bin/devpi use http://localhost:8000\r\n/home/home_dir/.local/bin/devpi login root\r\n\r\n"
         }
       },
       {
         "name": "login_root",
         "return_type": "none",
         "script": {
-          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\nspawn /home/engines/scripts/actionator/_login_root.sh\r\n\r\nexpect \"password for user root:\" { send \"$env(root_password)\\r\" }\r\n\r\nexpect eof"
+          "content": "#!/usr/bin/expect\r\n\r\nset timeout 20\r\nspawn /home/engines/scripts/actionators/_login_root.sh\r\n\r\nexpect \"password for user root:\" { send \"$env(root_password)\\r\" }\r\n\r\nexpect eof"
         }
       }
     ]
